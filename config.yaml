@@ -1,0 +1,35 @@
+# ---------------------------------------------------------------- ADLS target
+adls:
+  account_name: mystorageaccount        # storage account name (ADLS Gen2 / hierarchical namespace)
+  container: synthetic                  # container (file system); created if missing
+  access_key_env: ADLS_ACCESS_KEY       # Windows env var holding the storage account access key
+  root_path: raw                        # folder in the container. EVERYTHING under it is deleted on each run.
+  # allow_clean_container_root: false   # must be true to allow root_path: "" (wipes the whole container)
+
+# ---------------------------------------------------------------- inputs
+datasets_dir: ./datasets                # one *.json file per dataset
+
+# ---------------------------------------------------------------- output
+output:
+  format: csv                           # csv | parquet | json  (a dataset json can override with "format")
+  # placeholders: {dataset} {batch_id} {batch_start} {batch_end} {ext}  (python format syntax)
+  path_template: "{dataset}/load_date={batch_start:%Y-%m-%d}/{dataset}_{batch_id:04d}.{ext}"
+
+# ---------------------------------------------------------------- batches
+# Pick ONE combination:
+#   start_date + end_date + interval -> one batch per interval in the range (end_date inclusive)
+#   start_date + interval + count     -> `count` consecutive batches
+#   start_date + end_date + count     -> date range split into `count` equal batches
+#   count only                        -> `count` daily batches starting today
+# interval units: s, min (or m), h, d, w, mo, y   e.g. 30min, 6h, 1d, 1w, 1mo
+# Date/timestamp columns get values inside their batch's time window.
+batches:
+  start_date: 2026-01-01
+  end_date: 2026-01-07
+  interval: 1d
+  # count: 7
+
+# ---------------------------------------------------------------- generation
+generation:
+  seed: 42                              # same seed => same data every run; remove for random
+  locale: en_US                         # Faker locale, e.g. en_IN, en_GB, de_DE

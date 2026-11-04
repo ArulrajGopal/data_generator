@@ -1,0 +1,17 @@
+{
+  "name": "orders",
+  "rows_per_batch": { "min": 100, "max": 200 },
+  "format": "parquet",
+  "columns": [
+    { "name": "order_id",     "type": "uuid" },
+    { "name": "customer_id",  "type": "reference", "dataset": "customers", "column": "customer_id", "scope": "all" },
+    { "name": "order_date",   "type": "date" },
+    { "name": "order_ts",     "type": "timestamp", "format": "%Y-%m-%d %H:%M:%S" },
+    { "name": "status",       "type": "choice", "values": ["NEW", "SHIPPED", "DELIVERED", "CANCELLED"], "weights": [10, 30, 55, 5] },
+    { "name": "quantity",     "type": "int", "min": 1, "max": 10 },
+    { "name": "unit_price",   "type": "float", "min": 1, "max": 500, "precision": 2, "distribution": "normal", "mean": 80, "std": 40 },
+    { "name": "currency",     "type": "constant", "value": "INR" },
+    { "name": "coupon_code",  "type": "string", "length": 6, "chars": "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", "null_ratio": 0.7 },
+    { "name": "load_batch_start", "type": "batch", "field": "start" }
+  ]
+}
