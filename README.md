@@ -3,7 +3,8 @@
 ```
 config.yaml          ADLS account/container, env var for the key, batches, output format
 datasets/*.json      one file per dataset (columns + rows per batch)
-datagen.cmd          shortcut:  datagen run | datagen clean | datagen plan
+datagen.cmd          shortcut for python -m datagen (see HOW_TO_RUN.md)
+HOW_TO_RUN.md        how to run every command
 datagen/             source code
 ```
 
@@ -15,18 +16,7 @@ setx ADLS_ACCESS_KEY "<storage account access key>"   # name must match adls.acc
 ```
 Then edit `config.yaml` (`account_name`, `container`, `root_path`, `batches`).
 
-## Commands
-
-| Command | What it does |
-|---|---|
-| `datagen plan` | Checks the config and datasets, shows the batches and example paths, and confirms the key env var is set |
-| `datagen run` | **Deletes everything under `adls.root_path`**, then generates and uploads every batch |
-| `datagen clean` | Only deletes |
-| `datagen run --local .\out` | Same as `run`, but writes to a local folder (for testing) |
-| `datagen run --no-clean` | Appends without deleting |
-| `-c other.yaml` | Uses a different config file |
-
-(`python -m datagen run` is the same as `datagen run`.)
+To run the generator, see [HOW_TO_RUN.md](HOW_TO_RUN.md).
 
 ## Batches (`config.yaml`)
 
